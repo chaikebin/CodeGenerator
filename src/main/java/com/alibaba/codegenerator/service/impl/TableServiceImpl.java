@@ -129,7 +129,6 @@ public class TableServiceImpl implements TableService {
 					table.addPrimaryKey(column);
 				}
 				column.setPrimaryKey(true);
-//				addColumnInfo(column, rs, columnName);
 			}
 		} catch (SQLException e) {
 			throw e;

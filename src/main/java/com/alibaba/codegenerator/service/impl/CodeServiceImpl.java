@@ -55,8 +55,9 @@ public class CodeServiceImpl implements CodeService {
 
 	private void makeFile(File file, File targetDir, Code code)
 			throws IOException {
-		if (file.getName().startsWith("_")) {
-			if (file.getName().contains("$ClassName$")) {
+		if (file.getName().startsWith("$")) {
+			if (file.getName().contains("$ClassName")
+					|| file.getName().contains("${ClassName}")) {
 				doClassFile(file, targetDir, code);
 			} else {
 				doTemplateFile(file, targetDir, code);
@@ -86,18 +87,29 @@ public class CodeServiceImpl implements CodeService {
 		if (code.getTables() == null) {
 			return;
 		}
-		for(Table table:code.getTables()) {
+		for (Table table : code.getTables()) {
 			Map<String, Object> params = fillCodeParams(code);
 			params.put("table", table);
 			params.put("columns", table.getColumns());
-			templateEngine.processToFile(file, new File(targetDir, file.getName()
-					.substring(1).replaceAll("$ClassName$", table.getClassName())), params);
+			if (file.getName().contains("$ClassName")) {
+				templateEngine.processToFile(
+						file,
+						new File(targetDir, file.getName()
+								.replaceAll("\\$ClassName", table.getClassName())),
+						params);
+			} else if (file.getName().contains("${ClassName}")) {
+				templateEngine.processToFile(
+						file,
+						new File(targetDir, file.getName()
+								.replaceAll("\\$\\{ClassName\\}", table.getClassName())),
+						params);
+			}  
 		}
 	}
 
 	private void makeDir(File file, File targetDir, Code code)
 			throws IOException {
-		if (file.getName().contains("$PackageName$")) {
+		if (file.getName().contains("$PackageName")) {
 			String[] packageNames = code.getPackageName().split("\\.");
 			for (String packageName : packageNames) {
 				targetDir = new File(targetDir, packageName);

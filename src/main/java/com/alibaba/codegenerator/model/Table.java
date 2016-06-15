@@ -20,9 +20,13 @@ public class Table {
 	}
 
 	public String getClassName() {
-		return StringUtil.getCamelCaseString(tableName, false);
+		return StringUtil.getCamelCaseString(tableName, true);
 	}
 
+	public String getClassName2() {
+		return StringUtil.getCamelCaseString(tableName, false);
+	}
+	
 	public List<Column> getBaseColumns() {
 		return baseColumns;
 	}

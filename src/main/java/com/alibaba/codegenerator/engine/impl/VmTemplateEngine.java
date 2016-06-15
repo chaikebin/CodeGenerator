@@ -30,9 +30,6 @@ public class VmTemplateEngine implements TemplateEngine {
 	@PostConstruct
 	public void init() {
 		ve = new VelocityEngine();
-		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-		ve.setProperty("classpath.resource.loader.class",
-				ClasspathResourceLoader.class.getName());
 		ve.init();
 	}
 
@@ -47,7 +44,7 @@ public class VmTemplateEngine implements TemplateEngine {
 			Template template = ve.getTemplate(
 					templateFile.getAbsolutePath().substring(
 							templateFile.getAbsolutePath().indexOf(
-									"templates")+"templates".length()+1), "UTF-8");
+									"templates")), "UTF-8");
 			VelocityContext context = new VelocityContext();
 			Iterator<String> keys = params.keySet().iterator();
 			while (keys.hasNext()) {

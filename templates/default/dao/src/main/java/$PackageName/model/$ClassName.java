@@ -1,4 +1,4 @@
-package ${basePackage}.model;
+package ${packageName}.model;
 
 #if ($table.hasDateColumn)
 import java.util.Date;
