@@ -151,9 +151,11 @@ public class JavaTypeResolver {
     }
 
     private static String calculateNumericType(Column column) {
-        if (column.getDecimalDigits() > 0 || column.getSize() > 18 || forceBigDecimals) {
-            return TYPE_BIGDECIMAL;
-        } else if (column.getSize() > 9) {
+//        if (column.getDecimalDigits() > 0 || column.getSize() > 18 || forceBigDecimals) {
+//            return TYPE_BIGDECIMAL;
+//        } else
+        	
+        	if (column.getSize() > 9) {
             return TYPE_LONG;
         } else if (column.getSize() > 4) {
             return TYPE_INTEGER;
@@ -185,9 +187,11 @@ public class JavaTypeResolver {
     }
 
     private static String calculateFullNumericType(Column column) {
-        if (column.getDecimalDigits() > 0 || column.getSize() > 18 || forceBigDecimals) {
-            return FULL_TYPE_BIGDECIMAL;
-        } else if (column.getSize() > 9) {
+//        if (column.getDecimalDigits() > 0 || column.getSize() > 18 || forceBigDecimals) {
+//            return FULL_TYPE_BIGDECIMAL;
+//        } else 
+//        	
+        	if (column.getSize() > 9) {
             return FULL_TYPE_LONG;
         } else if (column.getSize() > 4) {
             return FULL_TYPE_INTEGER;

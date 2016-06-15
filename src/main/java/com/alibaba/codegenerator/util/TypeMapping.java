@@ -1,16 +1,19 @@
 package com.alibaba.codegenerator.util;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.omg.CORBA.portable.ApplicationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -19,30 +22,24 @@ import org.w3c.dom.NodeList;
 
 import com.alibaba.codegenerator.model.Column;
 
-public class TypeMapping implements Serializable {
+@Component
+public class TypeMapping {
 
-    private static final long serialVersionUID = 8573950623347746321L;
+    private static final String  MAPING_FILE = "/TypeMapping.xml";
 
-    private static final String  MAPING_FILE = "TypeMapping.xml";
+    private Map<Integer, String> typeMap = new HashMap<Integer, String>();
+    private Map<Integer, String> fullTypeMap = new HashMap<Integer, String>();
+    
+	private static final Logger logger = LoggerFactory
+			.getLogger(TypeMapping.class);
 
-    private String               mappginFile;
-
-    private Map<Integer, String> typeMap;
-    private Map<Integer, String> fullTypeMap;
-
-    public TypeMapping(String classPath){
-        this.mappginFile = classPath + MAPING_FILE;
-        typeMap = new HashMap<Integer, String>();
-        fullTypeMap = new HashMap<Integer, String>();
-    }
-
-    public void loadMappgin() throws ApplicationException {
+	@PostConstruct
+    public void loadMappging() throws ApplicationException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = factory.newDocumentBuilder();
-            Document doc = docBuilder.parse(mappginFile);
+            Document doc = docBuilder.parse(TypeMapping.class.getResourceAsStream(MAPING_FILE));
             Element rootNode = doc.getDocumentElement();
-
             NodeList nodeList = rootNode.getChildNodes();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node childNode = nodeList.item(i);
@@ -59,6 +56,8 @@ public class TypeMapping implements Serializable {
                 }
             }
         } catch (Exception e) {
+        	logger.error(e.getMessage(),e);
+        	System.exit(1);
         }
     }
 
